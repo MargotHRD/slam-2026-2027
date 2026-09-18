@@ -17,7 +17,7 @@ $compteur = 0;
 foreach ($demandes as $demande) {
     if (
         $demande["etat"] === "nouvelle"
-        && $utilisateur["actif"] === true
+        && $utilisateur["actif"] === true #ou && !$utilisateur["actif"] 
         && ($utilisateur["role"] === "administrateur" 
         || ($utilisateur["role"] === "gestionnaire" 
         && $demande["montant"] <= 1000))
