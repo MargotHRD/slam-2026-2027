@@ -15,13 +15,7 @@ $demandes = array(
 $compteur = 0;
 
 foreach ($demandes as $demande) {
-    if (
-        $demande["etat"] === "nouvelle"
-        && $utilisateur["actif"] === true #ou && !$utilisateur["actif"] 
-        && ($utilisateur["role"] === "administrateur" 
-        || ($utilisateur["role"] === "gestionnaire" 
-        && $demande["montant"] <= 1000))
-    ) {
+    if (peutValider($utilisateur, $demande)){
         $compteur++;
         echo "Demande ID: " . $demande["id"] . " est valide pour traitement.<br>";
     }
@@ -31,5 +25,28 @@ foreach ($demandes as $demande) {
 }
 
 echo "Nombre total de demandes valides pour traitement: " . $compteur . "<br>";
+
+function peutValider(array $utilisateur, array $demande): bool
+{
+    if(!$utilisateur["actif"]) {
+        return false;
+    }
+    if(!$demande["etat"] === "nouvelle") {
+        return false;
+    }
+        return $utilisateur["role"] === "administrateur" || ($utilisateur["role"] === "gestionnaire" && $demande["montant"] <= 1000);
+}
+
+function compterDemandesValidables(array $utilisateur, array $demandes): int
+{
+    $compteur = 0;
+    foreach ($demandes as $demande) {
+        if (peutValider($utilisateur, $demande)) {
+            $compteur++;
+        }
+    }
+    return $compteur;
+}
+
 
 ?>
